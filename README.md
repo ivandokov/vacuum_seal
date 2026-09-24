@@ -6,7 +6,7 @@ Print a vacuum seal gasket for a pneumatic speargun in TPU (Filaflex 82A) with n
 
 ## Files
 
-- `Vacuum seal.stl`: the CAD model (binary STL, axis Z through the origin, flange at z 0). The user re exports it as the design evolves; the generator always reads the current file. Third version (2026-09-24): 13.1 mm tall, flange r 5.15 to 8.10 mm up to about z 4.5, then a uniform 1.30 mm wall curving inward to the 6 mm bore (r 3.0, outer r 4.30) at the top. With the 0.4 nozzle that is 7 rings at the flange and 3 rings of 0.43 mm on the wall. Earlier versions: 13.5 mm tall with a 1.25 mm wall, then thickened to 2.0 to 2.4 mm.
+- `Seal.stl`: the CAD model (binary STL, axis Z through the origin, flange at z 0). The user re exports it as the design evolves; the generator always reads the current file. Third version (2026-09-24): 13.1 mm tall, flange r 5.15 to 8.10 mm up to about z 4.5, then a uniform 1.30 mm wall curving inward to the 6 mm bore (r 3.0, outer r 4.30) at the top. With the 0.4 nozzle that is 7 rings at the flange and 3 rings of 0.43 mm on the wall. Earlier versions: 13.5 mm tall with a 1.25 mm wall, then thickened to 2.0 to 2.4 mm.
 - `template.4mm.gcode.3mf`: BambuStudio 02.08 slice of the part. X1 Carbon, 0.4 nozzle, Filaflex 82A profile (246 C, first layer 240 C, bed 35 C textured plate), part center on the plate 128, 128. This file has seams (retraction plus wipe on every loop) and is only used as a template for start and end gcode, temperatures, fan schedule and bed position. The 0.6 nozzle template and output were removed once the user settled on the 0.4 nozzle.
 - `Output.4mm.gcode.3mf` (0.4 nozzle, 0.08 mm layers, 252 C): generated seamless file, ready to print. Only the 3mf is written; add `--plain-gcode` to also get a plain .gcode for inspection (or read it with `unzip -p <file> Metadata/plate_1.gcode`). Regenerated whenever the STL or options change.
 - `generate.py`: generator. Pure Python 3, no dependencies (numpy and matplotlib are not installed on this machine).
@@ -14,7 +14,7 @@ Print a vacuum seal gasket for a pneumatic speargun in TPU (Filaflex 82A) with n
 ## How the generator works
 
 ```
-python3 generate.py --stl "Vacuum seal.stl" --template template.4mm.gcode.3mf --output Output.4mm.gcode.3mf --layer-height 0.08 --first-layer-height 0.16 --temp 252
+python3 generate.py --stl Seal.stl --template template.4mm.gcode.3mf --output Output.4mm.gcode.3mf --layer-height 0.08 --first-layer-height 0.16 --temp 252
 ```
 
 Add `--count 3` (or any number) for several copies on the plate; they are printed one whole object after another on a grid around the template position, never layer by layer, so each object keeps the continuous path. Between objects there is one retract, a lift, a travel and an unretract.
